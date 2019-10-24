@@ -27,16 +27,14 @@ namespace pong
 
             if (isLeft)
             {
-                //position.X = graphics.Viewport.Width * 0.33f ;
-                //position.Y = graphics.Viewport.Height / 2f;
 
                 position.X = 30;
-                position.Y = 100;
+                position.Y = graphics.Viewport.Height / 2f;
 
             }
             else
             {
-                position.X = graphics.Viewport.Width * 0.66f + 100;//TODO may need to change
+                position.X = graphics.Viewport.Width - 60;
                 position.Y = graphics.Viewport.Height / 2f;
 
             }
