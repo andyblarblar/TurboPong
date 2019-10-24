@@ -13,55 +13,110 @@ namespace pong
     {
         public Texture2D sprite;
         public Vector2 position;
-
+        public Rectangle hitBox;
         private Ball ball;
         private GraphicsDevice graphics;
+        public bool isLeft;
         public 
         Paddle(Texture2D sprite, Ball ball, GraphicsDevice graphics, bool isLeft)
         {
             this.sprite = sprite;
             this.ball = ball;
             this.graphics = graphics;
+            this.isLeft = isLeft;
+
             if (isLeft)
             {
-                position.X = graphics.Viewport.Width * 0.33f ;
-                position.Y = graphics.Viewport.Height / 2f;
+                //position.X = graphics.Viewport.Width * 0.33f ;
+                //position.Y = graphics.Viewport.Height / 2f;
+
+                position.X = 30;
+                position.Y = 100;
+
             }
             else
             {
-                position.X = graphics.Viewport.Width * 0.66f;//TODO may need to change
+                position.X = graphics.Viewport.Width * 0.66f + 100;//TODO may need to change
                 position.Y = graphics.Viewport.Height / 2f;
 
             }
+
+            hitBox = new Rectangle((int)position.X,(int)position.Y, 30, 70);
+
         }
 
 
         public void Update(KeyboardState keyboard)
         {
-            if (keyboard.IsKeyDown(Keys.Up))
+            #region InputParseing
+
+            if (keyboard.IsKeyDown(Keys.Up) && !isLeft)
             {
+                if (keyboard.IsKeyDown(Keys.NumPad0))//TURBOOOO
+                {
+                    position.Y -= 10;
+                }
+
+                position.Y -= 5;
+
+            }
+
+            if (keyboard.IsKeyDown(Keys.Down) && !isLeft)
+            {
+                if (keyboard.IsKeyDown(Keys.NumPad0))//TURBOOOO
+                {
+                    position.Y += 10;
+                }
+
                 position.Y += 5;
             }
 
-            if (keyboard.IsKeyDown(Keys.Down))
+            if (keyboard.IsKeyDown(Keys.W) && isLeft)
             {
+                if (keyboard.IsKeyDown(Keys.LeftShift))//TURBOOOO
+                {
+                    position.Y -= 10;
+                }
+
                 position.Y -= 5;
+
             }
 
-            if (position.Y >= graphics.Viewport.Height)//keep in bounds
+            if (keyboard.IsKeyDown(Keys.S) && isLeft)
             {
-                position.Y = graphics.Viewport.Height;
+                if (keyboard.IsKeyDown(Keys.LeftShift))//TURBOOOO
+                {
+                    position.Y += 10;
+                }
+
+                position.Y += 5;
+            }
+
+            #endregion
+
+            #region collisions
+
+            if (position.Y >= graphics.Viewport.Height - 60 )//keep in bounds
+            {
+                position.Y = 420;
             }
             else if (position.Y <= 0f)
             {
                 position.Y = 0f;
             }
 
-            if (ball.position.X - position.X <= 7f && ball.position.Y - position.X <= 7f)//range to accept hit
+            
+            if (this.hitBox.Intersects(ball.hitBox))
             {
                 ball.hitBy = this;
                 ball.isHit = true;
             }
+
+            #endregion
+
+            hitBox.X = (int)position.X;
+            hitBox.Y = (int)position.Y;
+
 
         }
 
