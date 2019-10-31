@@ -96,7 +96,7 @@ namespace pong
 
             if (position.Y >= graphics.Viewport.Height - 60 )//keep in bounds
             {
-                position.Y = 420;
+                position.Y = graphics.Viewport.Height - 70;
             }
             else if (position.Y <= 0f)
             {
