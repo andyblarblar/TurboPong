@@ -15,13 +15,23 @@ namespace pong
         private Paddle paddle1;
         private Paddle paddle2;
         private Ball ball;
-        private int Lscore = 0;
-        private int Rscore = 0;
+        private ScoreBoard scoreBoard;
 
-        public Game1()
+        public Game1(string[] args)
         {
             graphics = new GraphicsDeviceManager(this);
-            
+            try
+            {
+                graphics.PreferredBackBufferHeight = int.Parse(args[0]);
+                graphics.PreferredBackBufferWidth = int.Parse(args[1]);
+            }
+            catch (Exception)
+            {
+                graphics.PreferredBackBufferWidth = 700;
+                graphics.PreferredBackBufferHeight = 500;
+
+            }
+
             Content.RootDirectory = "Content";
         }
 
@@ -33,6 +43,7 @@ namespace pong
         /// </summary>
         protected override void Initialize()
         {
+            
             GraphicsDevice.Viewport = new Viewport(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
 
             var paddleTexture = new Texture2D(GraphicsDevice,30,70);
@@ -52,7 +63,7 @@ namespace pong
             paddle1 = new Paddle(paddleTexture , ball, this.GraphicsDevice, true);//make a rect
             paddle2 = new Paddle(paddleTexture, ball, this.GraphicsDevice,false);//same
 
-            //draw stage and score
+            scoreBoard = new ScoreBoard(GraphicsDevice, this, ball);
 
             base.Initialize();
 
@@ -67,7 +78,7 @@ namespace pong
             spriteBatch = new SpriteBatch(GraphicsDevice);
             
 
-
+            
         }
 
         /// <summary>
@@ -94,16 +105,7 @@ namespace pong
             paddle1.Update(Keyboard.GetState());
             paddle2.Update(Keyboard.GetState());
             ball.Update();
-
-            if (ball.isInGoal)
-            {
-                if(ball.position.X >= GraphicsDevice.Viewport.Width) Console.WriteLine("Score: " + Lscore++ + ", " + Rscore);
-                else { Console.WriteLine("Score: " + Lscore + ", " + Rscore++);}
-
-                ball.position = new Vector2(250, 250);//TODO make score logic
-                ball.rate = new Vector2(-8f, 0f);
-                ball.isInGoal = false;
-            }
+            scoreBoard.Update();
 
 
 
@@ -116,12 +118,13 @@ namespace pong
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.Black);
 
             spriteBatch.Begin();
             ball.Draw(spriteBatch);
             paddle1.Draw(spriteBatch);
             paddle2.Draw(spriteBatch);
+            scoreBoard.Draw(spriteBatch);
             spriteBatch.End();
             
             base.Draw(gameTime);
