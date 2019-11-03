@@ -17,6 +17,8 @@ namespace pong
 
         public Vector2 rate;
 
+        public readonly int stdRate;
+
         public bool isHit = false;//true the frame of being hit, false after
 
         public bool isInGoal = false;
@@ -30,7 +32,7 @@ namespace pong
 
         private GraphicsDevice graphics;
 
-        public Ball(Texture2D texture,GraphicsDevice graphics)
+        public Ball(Texture2D texture,GraphicsDevice graphics,bool isHard)
         {
             this.texture = texture;
             this.graphics = graphics;
@@ -43,6 +45,7 @@ namespace pong
 
             rate = new Vector2(-8f ,0f);//go left
 
+            stdRate = isHard ? 4 : 2;
 
         }
 
@@ -76,7 +79,7 @@ namespace pong
                 if (Math.Abs((hitBy.position.Y - position.Y) - 45) > 46)//hit in top third
                 {
 
-                    rate.Y-= 2 + (int) ((hitBy.position.Y - position.Y - 45) * 0.1);
+                    rate.Y-= stdRate + (int) ((hitBy.position.Y - position.Y - 45) * 0.1);
 
                     if (hitBy.position.X > position.X)//is left paddle
                     {
@@ -108,7 +111,7 @@ namespace pong
                 else if (Math.Abs((hitBy.position.Y - position.Y) - 45) < 23)//hit in bottom
                 {
 
-                    rate.Y+= 2 + (int)((hitBy.position.Y - position.Y - 45) * 0.1);
+                    rate.Y+= stdRate + (int)((hitBy.position.Y - position.Y - 45) * 0.1);
 
                     if (hitBy.position.X > position.X)//is left paddle
                     {
@@ -118,7 +121,7 @@ namespace pong
                     {
                         position.X += 10;//shift to avoid being stuck in hitbox
                     }
-
+                    
                 }
 
                 isHit = false;//reset

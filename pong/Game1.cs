@@ -16,17 +16,21 @@ namespace pong
         private Paddle paddle2;
         private Ball ball;
         private ScoreBoard scoreBoard;
-
+        public bool isHard = false;
         public Game1(string[] args)
         {
             graphics = new GraphicsDeviceManager(this);
+
             try
             {
-                graphics.PreferredBackBufferHeight = int.Parse(args[0]);
                 graphics.PreferredBackBufferWidth = int.Parse(args[1]);
+                graphics.PreferredBackBufferHeight = int.Parse(args[0]);
+                if (args[3].Equals("hard")) isHard = true;
             }
+
             catch (Exception)
             {
+                Console.WriteLine("usage:\n pong.exe [Width Highth] [hard]");
                 graphics.PreferredBackBufferWidth = 700;
                 graphics.PreferredBackBufferHeight = 500;
 
@@ -59,7 +63,7 @@ namespace pong
             ballTexture.SetData(data2);
 
 
-            ball = new Ball(ballTexture, this.GraphicsDevice);//make a square
+            ball = new Ball(ballTexture, this.GraphicsDevice, isHard);//make a square
             paddle1 = new Paddle(paddleTexture , ball, this.GraphicsDevice, true);//make a rect
             paddle2 = new Paddle(paddleTexture, ball, this.GraphicsDevice,false);//same
 
