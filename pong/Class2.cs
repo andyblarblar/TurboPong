@@ -32,7 +32,7 @@ namespace pong
 
         private GraphicsDevice graphics;
 
-        public Ball(Texture2D texture,GraphicsDevice graphics,bool isHard)
+        public Ball(Texture2D texture,GraphicsDevice graphics,int velocity)
         {
             this.texture = texture;
             this.graphics = graphics;
@@ -45,7 +45,7 @@ namespace pong
 
             rate = new Vector2(-8f ,0f);//go left
 
-            stdRate = isHard ? 4 : 2;
+            stdRate = velocity;
 
         }
 
