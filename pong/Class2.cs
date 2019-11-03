@@ -108,7 +108,7 @@ namespace pong
                 else if (Math.Abs((hitBy.position.Y - position.Y) - 45) < 23)//hit in bottom
                 {
 
-                    rate.Y+=2;
+                    rate.Y+= 2 + (int)((hitBy.position.Y - position.Y - 45) * 0.1);
 
                     if (hitBy.position.X > position.X)//is left paddle
                     {
