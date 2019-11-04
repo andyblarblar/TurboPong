@@ -25,6 +25,8 @@ namespace pong
 
         public void Update()
         {
+            Random random = new Random();
+
             if (ball.isInGoal)
             {
                 if (ball.position.X >= graphics.Viewport.Width) leftScore.currentScore++;
@@ -33,7 +35,7 @@ namespace pong
                     rightScore.currentScore++;
                 }
 
-                ball.position = new Vector2(250, 250);
+                ball.position = new Vector2(250, random.Next(graphics.Viewport.Height -50));
                 ball.rate = new Vector2(-8f, 0f);
                 ball.isInGoal = false;
             }

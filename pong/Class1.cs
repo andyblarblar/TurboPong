@@ -9,13 +9,13 @@ using Microsoft.Xna.Framework.Input;
 
 namespace pong
 {
-    class Paddle
+    public class Paddle
     {
         public Texture2D sprite;
         public Vector2 position;
         public Rectangle hitBox;
-        private Ball ball;
-        private GraphicsDevice graphics;
+        protected Ball ball;
+        protected GraphicsDevice graphics;
         public bool isLeft;
         public 
         Paddle(Texture2D sprite, Ball ball, GraphicsDevice graphics, bool isLeft)
@@ -44,7 +44,7 @@ namespace pong
         }
 
 
-        public void Update(KeyboardState keyboard)
+        public virtual void Update(KeyboardState keyboard)
         {
             #region InputParseing
 
@@ -119,7 +119,7 @@ namespace pong
         }
 
 
-        public void Draw(SpriteBatch spriteBatch)
+        public virtual void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(sprite, position);
 

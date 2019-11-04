@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -10,13 +11,14 @@ namespace pong
     /// </summary>
     public class Game1 : Game
     {
-        GraphicsDeviceManager graphics;
+        readonly GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         private Paddle paddle1;
         private Paddle paddle2;
         private Ball ball;
         private ScoreBoard scoreBoard;
         public int volocity = 2;
+        public bool isAI = false;
         public Game1(string[] args)
         {
             graphics = new GraphicsDeviceManager(this);
@@ -25,12 +27,14 @@ namespace pong
             {
                 graphics.PreferredBackBufferWidth = int.Parse(args[0]);
                 graphics.PreferredBackBufferHeight = int.Parse(args[1]);
-                volocity = int.Parse(args[2]);
+                if (args.Contains("ai")) isAI = true;
+                volocity = int.Parse(args[args.Length - 1]);
+
             }
 
             catch (Exception)
             {
-                Console.WriteLine("usage:\n pong.exe [Width Highth] [velocity]");
+                Console.WriteLine("usage:\n pong.exe [Width Highth] [ai] [velocity]");
                 graphics.PreferredBackBufferWidth = 700;
                 graphics.PreferredBackBufferHeight = 500;
                 
@@ -56,16 +60,17 @@ namespace pong
             for (int i = 0; i < data.Length; ++i) data[i] = Color.White;
             paddleTexture.SetData(data);
 
-            var  ballTexture = new Texture2D(GraphicsDevice,10,10);
+            var ballTexture = new Texture2D(GraphicsDevice,10,10);
 
             Color[] data2 = new Color[10 * 10];
             for (int i = 0; i < data2.Length; ++i) data2[i] = Color.White;
             ballTexture.SetData(data2);
 
 
-            ball = new Ball(ballTexture, this.GraphicsDevice, volocity);//make a square
-            paddle1 = new Paddle(paddleTexture , ball, this.GraphicsDevice, true);//make a rect
-            paddle2 = new Paddle(paddleTexture, ball, this.GraphicsDevice,false);//same
+            ball = new Ball(ballTexture, this.GraphicsDevice, volocity);
+            paddle1 = isAI ? new AiPaddle(paddleTexture, ball, this.GraphicsDevice, true) : new Paddle(paddleTexture, ball, this.GraphicsDevice, true);
+                
+            paddle2 = isAI ? new AiPaddle(paddleTexture, ball, this.GraphicsDevice, false) : new Paddle(paddleTexture, ball, this.GraphicsDevice, false);
 
             scoreBoard = new ScoreBoard(GraphicsDevice, this, ball);
 

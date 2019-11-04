@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace pong
 {
-    class Ball
+    public class Ball
     {
         private Texture2D texture;
 
@@ -52,6 +52,8 @@ namespace pong
 
         public void Update()
         {
+            Random random = new Random();
+
 
             if (!isHit)
             {
@@ -79,7 +81,7 @@ namespace pong
                 if (Math.Abs((hitBy.position.Y - position.Y) - 45) > 46)//hit in top third
                 {
 
-                    rate.Y-= stdRate + (int) ((hitBy.position.Y - position.Y - 45) * 0.1);
+                    rate.Y-= stdRate + (int) ((hitBy.position.Y - position.Y - 45) * 0.1) + random.Next(5);
 
                     if (hitBy.position.X > position.X)//is left paddle
                     {
@@ -92,10 +94,10 @@ namespace pong
 
                 }
 
-                else if (Math.Abs(hitBy.position.Y - position.Y - 45) < 46 && Math.Abs(hitBy.position.Y - position.Y - 45) > 23)//hit in middle
+                else if (Math.Abs(hitBy.position.Y - position.Y - 45) < 46 && Math.Abs(hitBy.position.Y - position.Y - 45) > 23)//hit in middle TODO fix where middle is
                 {
 
-                    //nothing
+                    rate.Y -= stdRate + (int)((hitBy.position.Y - position.Y - 45) * 0.1) + random.Next(5);
 
                     if (hitBy.position.X > position.X)//is left paddle
                     {
@@ -111,7 +113,7 @@ namespace pong
                 else if (Math.Abs((hitBy.position.Y - position.Y) - 45) < 23)//hit in bottom
                 {
 
-                    rate.Y+= stdRate + (int)((hitBy.position.Y - position.Y - 45) * 0.1);
+                    rate.Y+= stdRate + (int)((hitBy.position.Y - position.Y - 45) * 0.1) + random.Next(5);
 
                     if (hitBy.position.X > position.X)//is left paddle
                     {
@@ -128,6 +130,7 @@ namespace pong
 
             }
 
+            hitBy = null;
             hitBox.X = (int) position.X;
             hitBox.Y = (int) position.Y;
 
