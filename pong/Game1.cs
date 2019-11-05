@@ -19,6 +19,7 @@ namespace pong
         private ScoreBoard scoreBoard;
         public int volocity = 2;
         public bool isAI = false;
+        
         public Game1(string[] args)
         {
             graphics = new GraphicsDeviceManager(this);
@@ -114,6 +115,7 @@ namespace pong
             paddle1.Update(Keyboard.GetState());
             paddle2.Update(Keyboard.GetState());
             ball.Update();
+           
             scoreBoard.Update();
 
 

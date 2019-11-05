@@ -35,9 +35,8 @@ namespace pong
                     rightScore.currentScore++;
                 }
 
-                ball.position = new Vector2(250, random.Next(graphics.Viewport.Height -50));
+                ball.position = new Vector2(graphics.Viewport.Width / 2, random.Next(graphics.Viewport.Height -50));
                 ball.rate = new Vector2(-8f, 0f);
-                ball.isInGoal = false;
             }
 
         }

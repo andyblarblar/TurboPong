@@ -10,7 +10,7 @@ namespace pong
     /// </summary>
     public class AiPaddle : Paddle
     {
-        private float? nextBallPosition = null;
+        public float? nextBallPosition = null;
 
 
         /// <inheritdoc />
@@ -22,18 +22,31 @@ namespace pong
 
         public override void Update(KeyboardState keyboard)
         {
-            if (nextBallPosition.Equals(null))
+            if(nextBallPosition.Equals(null) && isLeft)
             {
-                nextBallPosition = FindBallPositionR(ball.position, position, ball.rate);//called now to make sure game is actually running
+                 nextBallPosition = FindBallPositionR(ball.position, position, ball.rate);//called now to make sure game is actually running
             }
 
-            if (ball.isHit || isLeft && ball.isInGoal)
+            if (ball.wasHit || isLeft && ball.isInGoal)
             {
-                if (ball.hitBy == this)
+                if (ball.wasHitby == this)
                 {
-                    Console.WriteLine("in");
+                    if (!isLeft)//both paddles have updated, then reset vars
+                    {
+                        ball.wasHit = false;
+                        ball.wasHitby = null;
+                    }
+                    
+                    Console.WriteLine("in paddle "+isLeft);
                     goto outOfMov;//do nothing if ball is heading away from paddle
                 }
+
+                if (!isLeft)//both paddles have updated, then reset vars
+                {
+                    ball.wasHit = false;
+                    ball.wasHitby = null;
+                }
+
                 Console.WriteLine("in2 paddle:" + isLeft);
                 nextBallPosition = FindBallPositionR(ball.position, position, ball.rate);//find where to move to if hit by other paddle
 
@@ -90,11 +103,11 @@ namespace pong
         /// <summary>
         /// recursively finds where the ball will be after being hit
         /// </summary>
-        private float FindBallPositionR(Vector2 ballPos, Vector2 paddlePos, Vector2 ballRate)
+        public float FindBallPositionR(Vector2 ballPos, Vector2 paddlePos, Vector2 ballRate)
         {
             var newPos = new Vector2();
 
-            if (Math.Abs(ballPos.X - ballPos.X) < 5)//break condition
+            if (Math.Abs(ballPos.X - ballPos.X) < 1)//break condition
             {
                 return ballPos.Y;
             }

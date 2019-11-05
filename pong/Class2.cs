@@ -21,6 +21,11 @@ namespace pong
 
         public bool isHit = false;//true the frame of being hit, false after
 
+
+        public bool wasHit = false;//for AI
+        public Paddle wasHitby;
+
+
         public bool isInGoal = false;
 
         public Rectangle hitBox;
@@ -53,7 +58,7 @@ namespace pong
         public void Update()
         {
             Random random = new Random();
-
+            isInGoal = false;//needs to be cleared if ball is updating before scoreboard
 
             if (!isHit)
             {
@@ -75,6 +80,9 @@ namespace pong
             }
             else//hit
             {
+                wasHit = true;//update for AI
+                wasHitby = hitBy;
+
                 Console.WriteLine("hit: " + rate.Y);
                 rate.X *= -1;
 
@@ -130,7 +138,7 @@ namespace pong
 
             }
 
-            hitBy = null;
+            //hitBy = null; 
             hitBox.X = (int) position.X;
             hitBox.Y = (int) position.Y;
 
